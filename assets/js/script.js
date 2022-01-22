@@ -4,10 +4,6 @@ var cityInputEl = document.querySelector('#city');
 
 // API key
 const apiKey = "59821731ddfaee6faca13d91cee4cbbc";
-// OneCall API URL
-var oneCallAPI = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${exclusions}&appid=${apiKey}`;
-// Current Weather API URL
-var currentWeatherAPI = `api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
 // Search submission handler
 function searchSubmitHandler() {
@@ -29,14 +25,14 @@ function searchSubmitHandler() {
 
 // fetch function for city search data
 function getWeatherData(city) {
-    let currentWeatherAPI = `api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+    let currentWeatherAPI = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
 
     fetch(currentWeatherAPI).then(function (response) {
         if (response.ok) {
             console.log(response);
             response.json().then(function (data) {
                 console.log(data);
-                parseResponse(data);
+                displayWeatherData(data);
             });
         } else {
             alert("Error: " + response.statusText);
@@ -52,6 +48,9 @@ function getWeatherData(city) {
 // set local storage function for previous searches
 
 // function to parse search results
+function displayWeatherData(data) {
+    console.log(data)
+}
 
 // function to generate cards of weather data
 
