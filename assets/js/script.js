@@ -1,9 +1,13 @@
 // VARIABLES
 var searchFormEl = document.querySelector('#search-form');
 var cityInputEl = document.querySelector('#city');
+var searchHistory = document.querySelector('#city-history');
+var historyArr = [];
 
 // API key
 const apiKey = "59821731ddfaee6faca13d91cee4cbbc";
+
+// Display City Search History
 
 // Search submission handler
 function searchSubmitHandler() {
@@ -15,9 +19,16 @@ function searchSubmitHandler() {
     if (city) {
         getWeatherData(city);
 
+        // store city in local storage
+        historyArr.push(city);
+        localStorage.setItem('cityName', JSON.stringify(historyArr));
+
         // clear old content
         weatherContainerEl.textContent = "";
         cityInputEl.value = "";
+
+        // display history
+
     } else {
         alert("Please enter a city");
     }
@@ -53,5 +64,8 @@ function displayWeatherData(data) {
 }
 
 // function to generate cards of weather data
+function createCards() {
+    let weatherCard = document.createElement
+}
 
 searchFormEl.addEventListener("submit", searchSubmitHandler);
