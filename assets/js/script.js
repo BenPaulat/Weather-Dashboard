@@ -85,6 +85,15 @@ function displayWeatherData(res) {
         day4: {},
         day5: {},
     };
+    for (let i = 0; i < 6; i++) {
+        fiveDayForcastObj[`day${i}`].name = res.city.name;
+        const convF = (res.list[i].main.temp - 273.15) * 1.8 + 32;
+        fiveDayForcastObj[`day${i}`].temperature = convF.toFixed(1);
+        fiveDayForcastObj[`day${i}`].humidity = res.list[0].main.humidity;
+        fiveDayForcastObj[`day${i}`].windspeed = res.list[0].wind.speed;
+        fiveDayForcastObj[`day${i}`].coordinates = res.city.coord;
+    }
+    return fiveDayForcastObj;
 }
 
 searchFormEl.addEventListener("submit", searchSubmitHandler);
