@@ -2,6 +2,8 @@
 var searchFormEl = document.querySelector('#search-form');
 var cityInputEl = document.querySelector('#city');
 var searchHistoryEl = document.querySelector('#city-history');
+var weatherCardContainerEl = document.querySelector('#weather-container');
+var weatherCardArr = [];
 var historyArr = [];
 
 // API key
@@ -44,6 +46,7 @@ function searchSubmitHandler() {
         cityInputEl.value = "";
 
         // display history
+        displaySearchHistory(city);
 
     } else {
         alert("Please enter a city");
@@ -54,7 +57,7 @@ function searchSubmitHandler() {
 function getWeatherData(city) {
     let currentWeatherAPI = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
 
-    fetch(currentWeatherAPI).then(function (response) {
+    fetch(currentWeatherAPI).then(function(response) {
         if (response.ok) {
             console.log(response);
             response.json().then(function (data) {
@@ -70,18 +73,18 @@ function getWeatherData(city) {
         });
 };
 
-// generate array of previous search cities
-
-// set local storage function for previous searches
-
 // function to parse search results
-function displayWeatherData(data) {
-    console.log(data)
-}
+function displayWeatherData(res) {
+    console.log(res);
 
-// function to generate cards of weather data
-function createCards() {
-    let weatherCard = document.createElement
+    let fiveDayForcastObj = {
+        day0: {},
+        day1: {},
+        day2: {},
+        day3: {},
+        day4: {},
+        day5: {},
+    };
 }
 
 searchFormEl.addEventListener("submit", searchSubmitHandler);
