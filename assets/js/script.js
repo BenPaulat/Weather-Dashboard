@@ -20,7 +20,7 @@ function displaySearchHistory() {
     for (var i = 0; i < historyArr.length; i++) {
         var cityNameBtn = document.createElement('button');
         cityNameBtn.setAttribute('type', 'submit');
-        cityNameBtn.setAttribute('onClick', searchSubmitHandler(cityNameBtn.innerText));
+        cityNameBtn.setAttribute('onClick', 'searchSubmitHandler(cityNameBtn.innerText)');
         cityNameBtn.classList.add('btn');
         cityNameBtn.innerText = `${historyArr[i]}`;
         searchHistoryEl.append(cityNameBtn);
@@ -33,22 +33,24 @@ function searchSubmitHandler() {
 
     // get value from input element
     var city = cityInputEl.value.trim();
-
+    
     if (city) {
+        console.log(city);
         getWeatherData(city);
 
         // store city in local storage
         historyArr.push(city);
         localStorage.setItem('cityName', JSON.stringify(historyArr));
-
-        // clear old content
-        weatherContainerEl.textContent = "";
-        cityInputEl.value = "";
-
+        
         // display history
         displaySearchHistory(city);
 
-    } else {
+        // clear old content
+        searchHistoryEl.textContent = "";
+        cityInputEl.value = "";
+
+
+    } else if (!city) {
         alert("Please enter a city");
     }
 };
@@ -57,24 +59,19 @@ function searchSubmitHandler() {
 function getWeatherData(city) {
     let currentWeatherAPI = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
 
-    fetch(currentWeatherAPI).then(function(response) {
-        if (response.ok) {
-            console.log(response);
-            response.json().then(function (data) {
-                console.log(data);
-                displayWeatherData(data);
-            });
-        } else {
-            alert("Error: " + response.statusText);
-        }
+    fetch(currentWeatherAPI)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        handleWeatherData(data);
     })
         .catch(function (error) {
             alert("Unable to connect to Weather API");
         });
-};
+    };
 
 // function to parse search results
-function displayWeatherData(res) {
+function handleWeatherData(res) {
     console.log(res);
 
     let fiveDayForcastObj = {
@@ -93,7 +90,40 @@ function displayWeatherData(res) {
         fiveDayForcastObj[`day${i}`].windspeed = res.list[0].wind.speed;
         fiveDayForcastObj[`day${i}`].coordinates = res.city.coord;
     }
-    return fiveDayForcastObj;
+    displayWeatherData(fiveDayForcastObj);
+}
+
+function displayWeatherData(objArr) {
+    const day = new Date(currentDate);
+    
+    for (let i = 0; i < objArr.length; i++) {
+        day.setDate(currentDate.getDate() + i);
+        const temp = cityData[`day${i}`].temperature;
+        const humidity = cityData[`day${i}`].humidity;
+        weatherCardContainerEl += `
+        <div class="card" style="width: 9rem;">
+            <div class="card-body">
+                <div class="card-title">
+                    ${day.toLocaleDateString()}
+                </div>
+                <div class="card-text">
+                    Temp: ${temp} °F
+                </div>
+                <div class="card-text">
+                    Humidity: ${humidity}%
+                </div>
+            </div>
+        </div>`;
+        
+    }
+        
+    // loop over array of weather data and push to containter
+    // for (var i = 0; i < objArr.length; i++) {
+    //     let weatherCardEl = document.createElement('div');
+    //     weatherCardEl.classList.add('card');
+    //     weatherCardContainerEl.append(weatherCardEl[i])
+    // }
+
 }
 
 searchFormEl.addEventListener("submit", searchSubmitHandler);
