@@ -1,13 +1,29 @@
 // VARIABLES
 var searchFormEl = document.querySelector('#search-form');
 var cityInputEl = document.querySelector('#city');
-var searchHistory = document.querySelector('#city-history');
+var searchHistoryEl = document.querySelector('#city-history');
 var historyArr = [];
 
 // API key
 const apiKey = "59821731ddfaee6faca13d91cee4cbbc";
 
 // Display City Search History
+function displaySearchHistory() {
+    // create list element
+    let historyList = document.createElement('div');
+    historyList.classList.add('card-body');
+    // add history element to search history section
+    searchHistoryEl.append(historyList)
+
+    for (var i = 0; i < historyArr.length; i++) {
+        var cityNameBtn = document.createElement('button');
+        cityNameBtn.setAttribute('type', 'submit');
+        cityNameBtn.setAttribute('onClick', searchSubmitHandler(cityNameBtn.innerText));
+        cityNameBtn.classList.add('btn');
+        cityNameBtn.innerText = `${historyArr[i]}`;
+        searchHistoryEl.append(cityNameBtn);
+    }
+}
 
 // Search submission handler
 function searchSubmitHandler() {
